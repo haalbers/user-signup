@@ -24,26 +24,37 @@ def validate_input():
     verifypassword = request.form['verifypassword']
     email = request.form['email']
 
-    if len(username) > 20 or len(username) < 3:
+    if len(username) > 20 or len(username) < 3 or " " in username:
         username_error = "Invalid username"
-        template = jinja_env.get_template('welcome_form.html')
-        return template.render(username_error=username_error)
+    else:
+        username_error = ""
 
-    if len(password) > 20 or len(password) < 3:
+    if len(password) > 20 or len(password) < 3 or " " in password:
         password_error = "Invalid password"
-        template = jinja_env.get_template('welcome_form.html')
-        return template.render(password_error=password_error)
+    else:
+        password_error = ""
 
     if password != verifypassword:
         verifypassword_error = "Passwords do not match"
-        template = jinja_env.get_template('welcome_form.html')
-        return template.render(verifypassword_error=verifypassword_error)
+    else:
+        verifypassword_error = ""
 
-@app.route("/welcome", methods=['POST'])
-def welcome():
+    if len(email) != 0 and (len(email) > 20 or len(email) < 3 or " " in email:
+        email_error = "Invalid email"
+    else:
+        email_error = ""
+
+        template = jinja_env.get_template('welcome_form.html')
+        return template.render(username_error=username_error, p#assword_error=password_error, #verifypassword_error=verifypassword_error)
+
+#how do I change whether it redirects to a welcome page or stays on form?
+#how do I keep the username in the form but clear out password?
+#how do I set up "if errors = 0" then we're good?
+
+@app.route("/", methods=['POST'])
+def greeting():
     username = request.form['username']
     template = jinja_env.get_template('response.html')
-    return template.render(username=username)    
-
+    return template.render(username=username)
 
 app.run()
