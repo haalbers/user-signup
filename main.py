@@ -34,7 +34,14 @@ def validate_input():
     else:
         verifypassword_error = ""
 
-    if len(email) != 0 and (len(email) > 20 or len(email) < 3) or " " in email:
+    if len(email) < 3:
+        email_error = "Invalid email"
+
+    if len(email) != 0 and (len(email) > 20 or len(email) < 3):
+        email_error = "Invalid email"
+    elif " " in email:
+        email_error = "Invalid email"
+    elif "@" and "." not in email:
         email_error = "Invalid email"
     else:
         email_error = ""
@@ -43,7 +50,7 @@ def validate_input():
         return redirect('/welcome?username={0}'.format(username))
         
     else:
-        return render_template("welcome_form.html", username=username, email=email, username_error=username_error, password_error=password_error, verifypassword_error=verifypassword_error)
+        return render_template("welcome_form.html", username=username, email=email, username_error=username_error, password_error=password_error, verifypassword_error=verifypassword_error, email_error=email_error)
 
 @app.route("/welcome")
 def welcome():
